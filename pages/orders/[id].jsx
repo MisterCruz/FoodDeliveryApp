@@ -3,7 +3,11 @@ import Image from "next/image"
 
 const Order = () => {
   return (
-    <div> Order </div>
+    <div className={styles.container}> 
+        <div className={styles.left}></div>
+        <div className={styles.right}></div>
+    </div>
+
   )
 }
 
