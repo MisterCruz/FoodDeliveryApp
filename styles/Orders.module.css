@@ -35,3 +35,9 @@
   margin-top: 20px;
   cursor: not-allowed;
 }
+
+.table {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 50px;
+}
