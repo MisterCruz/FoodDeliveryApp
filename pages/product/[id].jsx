@@ -35,18 +35,13 @@ const Product = ({pizza}) => {
             </div>
             <h3 className={styles.choose}>Choose additional ingredients</h3>
             <div className={styles.ingredients}>
-                <div className={styles.option}>
+                {pizza.extraOptions.map((option) => (
+                    <div className={styles.option} key={option._id}>
                     <input type="checkbox" id="double" name="double" className={styles.checkbox} />
-                    <label htmlFor="double">Double Ingredients</label>
+                    <label htmlFor="double">{option.text}</label>
                 </div>
-                <div className={styles.option}>
-                    <input type="checkbox" id="extraCheese" name="extraCheese" className={styles.checkbox} />
-                    <label htmlFor="extraCheese">Extra Cheese</label>
-                </div>
-                <div className={styles.option}>
-                    <input type="checkbox" id="garlicSauce" name="garlicSauce" className={styles.checkbox} />
-                    <label htmlFor="garlicSauce">Garlic Sauce</label>
-                </div>
+                ))}
+                
             </div>
             <div className={styles.add}>
                 <input type="number" defaultValue={1} className={styles.quantity}/>
