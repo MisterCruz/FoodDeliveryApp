@@ -7,17 +7,31 @@ import {
     PayPalButtons,
     usePayPalScriptReducer
 } from "@paypal/react-paypal-js";
-
+import Router, { useRouter } from "next/router";
+import { reset } from "../redux/cartSlice";
+import axios from "axios";
 
 const Cart = () => {
     const [open, setOpen] = useState(false);
-    //1:09 min
-    const amount = "2";
+    const cart = useSelector(state=> state.cart);
+    const amount = cart.total;
     const currency = "USD";
     const style = {"layout":"vertical"};
+    const router = useRouter()
 
     const dispatch = useDispatch();
-    const cart = useSelector(state=> state.cart);
+    
+    const createOrder = async (data) => {
+        try {
+            const res = await axios.post("http://localhost:3000/api/orders", data)
+            if (res.status === 201) {
+                dispatch(reset())
+                router.push(`/orders/${res.data._id}`);
+            }
+        } catch(err) {
+            console.log(err)
+        }
+    }
     
     
 const ButtonWrapper = ({ currency, showSpinner }) => {
@@ -59,8 +73,9 @@ const ButtonWrapper = ({ currency, showSpinner }) => {
                         });
                 }}
                 onApprove={function (data, actions) {
-                    return actions.order.capture().then(function () {
-                        // 
+                    return actions.order.capture().then(function (details) {
+                        const shipping = details.purchase_units[0].shipping;
+                        createOrder({customer:shipping.name.full_name, address: shipping.address.address_line_1, total: cart.total, method: 1,})
                     });
                 }}
             />
@@ -129,7 +144,7 @@ const ButtonWrapper = ({ currency, showSpinner }) => {
                         <button className={styles.payButton}>CASH ON DELIVERY</button>
                     <PayPalScriptProvider
                     options={{
-                        "client-id": "test",
+                        "client-id": "Afzxrc3P381Or-oo4FQj-PcbeexdGkw2WjpKoqPIzlhlG7bgXazgcbUIG0fon0_00pnCELLZuvKpn00k",
                         components: "buttons",
                         currency: "USD",
                         "disable-funding": "credit,card,venmo"
