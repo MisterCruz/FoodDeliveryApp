@@ -1,7 +1,7 @@
 import Image from "next/image"
 import styles from "../styles/Cart.module.css"
 import { useDispatch, useSelector } from "react-redux"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
     PayPalScriptProvider,
     PayPalButtons,
@@ -10,6 +10,8 @@ import {
 
 
 const Cart = () => {
+    const [open, setOpen] = useState(false);
+    //1:09 min
     const amount = "2";
     const currency = "USD";
     const style = {"layout":"vertical"};
@@ -122,20 +124,27 @@ const ButtonWrapper = ({ currency, showSpinner }) => {
                 <div className={styles.totalText}>
                     <b className={styles.totalTextTitle}>Total: </b>${cart.total}
                 </div>
-                <button className={styles.button}>CHECKOUT NOW</button>
-                <PayPalScriptProvider
-                options={{
-                    "client-id": "test",
-                    components: "buttons",
-                    currency: "USD",
-                    "disable-funding": "credit,card,venmo"
-                }}
-            >
-				<ButtonWrapper
-                    currency={currency}
-                    showSpinner={false}
-                />
-			</PayPalScriptProvider>
+                {open ? (
+                    <div className={styles.paymentMethods}>
+                        <button className={styles.payButton}>CASH ON DELIVERY</button>
+                    <PayPalScriptProvider
+                    options={{
+                        "client-id": "test",
+                        components: "buttons",
+                        currency: "USD",
+                        "disable-funding": "credit,card,venmo"
+                    }}
+                >
+                    <ButtonWrapper
+                        currency={currency}
+                        showSpinner={false}
+                    />
+                </PayPalScriptProvider>
+                </div>
+                ) : (
+                    <button onClick={() => setOpen(true)} className={styles.button}>CHECKOUT NOW</button>
+                )}
+                
             </div>
         </div>
     </div>
