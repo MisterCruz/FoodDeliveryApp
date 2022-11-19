@@ -18,8 +18,22 @@ const handler = async (req, res) => {
     }
   }
   if (method === "PUT") {
+    try {
+      const order = await Order.findByIdAndUpdate(id, req.body, {
+        new: true,
+      });
+      res.status(201).json(order);
+    } catch (err) {
+      res.status(500).json(err);
+    }
   }
   if (method === "DELETE") {
+    try {
+      await Order.findByIdAndDelete(id);
+      res.status(201).json("The product has been deleted");
+    } catch (err) {
+      res.status(500).json(err);
+    }
   }
 };
 
